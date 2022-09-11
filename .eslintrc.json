@@ -1,0 +1,26 @@
+{
+  "extends": ["next/core-web-vitals", "prettier"],
+  "newlines-between": "always",
+  "pathGroups": [
+    {
+      "pattern": "react**",
+      "group": "external",
+      "position": "before"
+    },
+    {
+      "pattern": "{@/app/**,@/features/**,@/libs/**}",
+      "group": "internal",
+      "position": "before"
+    },
+    {
+      "pattern": "{@/components/**,@/pages/**}",
+      "group": "internal",
+      "position": "before"
+    },
+    {
+      "pattern": "./**.module.css",
+      "group": "index",
+      "position": "after"
+    }
+  ]
+}
