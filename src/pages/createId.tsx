@@ -27,6 +27,7 @@ const CreateIdPage: NextPage = () => {
           子作品として登録
         </button>
       </div>
+      {/* Footerまだです */}
     </div>
   )
 }
