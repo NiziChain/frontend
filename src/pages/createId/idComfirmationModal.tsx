@@ -57,9 +57,6 @@ const IdComfirmationModel = () => {
             <Typography id="modal-modal-title" variant="h6" component="h2" sx={TypographyStyle}>
               IDを発行しますか？
             </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
             <Button onClick={startLoading}>はい</Button>
             <Button onClick={handleClose}>いいえ</Button>
           </Box>
