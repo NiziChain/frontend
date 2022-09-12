@@ -2,7 +2,7 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import { ethers, Signer } from "ethers";
 
 export default {
-	async connectWallet (): Promise<Signer|null> {
+	async connectWallet (): Promise<Signer|false|null> {
 		const provider = await detectEthereumProvider();
 		if(provider) {
 			// MetaMask検出時の処理
@@ -30,6 +30,7 @@ export default {
 		} else {
 			// TODO: MetaMaskが検出されない時の処理があるとよき。優先度低め
 			console.log("Please install MetaMask");
+			return false;
 		}
 		return null;
 	},
