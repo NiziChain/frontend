@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography'
 //import Modal from "@mui/material/Modal";
 import { CircularProgress, Container, Grid } from '@mui/material'
 import { NextPage } from 'next'
+import { useRouter } from 'next/router'
 import Modal, { useModal } from '@/components/id/Modal'
 import { useState } from 'react'
 import Header from '@/components/base/Header'
@@ -31,6 +32,18 @@ const TypographyStyle = {
 }
 
 const IdConfirmationPage: NextPage = () => {
+
+  const router = useRouter()
+  const handleClick = (isOriginal: boolean) => {
+    if(isOriginal){
+      console.log('親')
+      router.push(`/id/originalSetting`)
+    }else{
+      console.log('子')
+      router.push(`/id/secondarySetting`)
+    }
+  }
+
   const { open, handleOpen, handleClose } = useModal()
   const [loading, setLoading] = useState(false)
   const startLoading = () => {
@@ -48,6 +61,23 @@ const IdConfirmationPage: NextPage = () => {
   return (
     <>
       <Header />
+      <div className='min-h-screen'>
+        <h1 className='font-bold mt-20 text-center'>IDの発行</h1>
+        <div className=' flex justify-center mt-20 text-center align-middle'>
+          <button
+            onClick={()=>handleClick(true)}
+            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'
+          >
+            親作品として登録
+          </button>
+          <button
+            onClick={()=>handleClick(false)}
+            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'
+          >
+            子作品として登録
+          </button>
+        </div>
+      </div>
       <Container component='div' className=' min-h-screen'>
         <button onClick={handleOpen}>Open Modal</button>
         <Modal open={open} className=''>
