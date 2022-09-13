@@ -37,7 +37,8 @@ const connectWallet = async(): Promise<Signer|false|null> => {
 		return _signer;
 	} else {
 		// TODO: MetaMaskが検出されない時の処理があるとよき。優先度低め
-		alert("MetaMaskをインストールをしてください");
+		alert("以下のURLからMetaMaskをインストールをしてください。\n" +
+			"https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=ja");
 		return false;
 	}
 }
