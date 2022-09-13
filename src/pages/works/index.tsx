@@ -9,33 +9,8 @@ import { useState, useEffect } from 'react'
 import { getAPIData } from '@/axiosUtl'
 
 const Index: NextPage = () => {
-  // responseを実際に撮ってきたやつに変える
-  const response = {
-    contents: [
-      {
-        isOriginal: true,
-        title: 'ドラえもん',
-        description: '作品ドラえもん',
-        createdAt: '2022.09.30',
-        contentId: '10',
-      },
-      {
-        isOriginal: true,
-        title: 'クレヨンしんちゃん',
-        description: '作品クレヨンしんちゃん',
-        createdAt: '2001.08.30',
-        contentId: '8',
-      },
-      {
-        isOriginal: false,
-        title: 'ドラえもん戦記',
-        description: 'ドラえもんを元に作成した2次作品',
-        createdAt: '2022.10.30',
-        contentId: '12',
-      },
-    ],
-  }
-
+  const parentList: ContentList[] = []
+  const niziList: ContentList[] = []
   const [contentList, setContentList] = useState([])
 
   useEffect(() => {
@@ -50,10 +25,6 @@ const Index: NextPage = () => {
     return response
   }
 
-  const parentList: ContentList[] = []
-  const niziList: ContentList[] = []
-
-  console.log('contentList', contentList)
 
   if (contentList)
     contentList.map((content) => {
