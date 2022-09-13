@@ -51,6 +51,10 @@ class ContractInteractor {
 		return await this.nizi.registerOriginal(royalty);
 	}
 
+	public async getNextContentId() {
+		return (await this.nizi.getNumberOfContents()).add(1);
+	}
+
 	public async registerSecondary(parentId: string|number|BigNumber) {
 		let royalty = await this.getRoyalty(parentId);
 		return await this.nizi.registerSecondary(parentId, {value: royalty.toString()});

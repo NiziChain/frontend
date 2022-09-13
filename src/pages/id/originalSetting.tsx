@@ -10,9 +10,11 @@ import {
   Button,
   CircularProgress
 } from '@mui/material'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Modal, { useModal } from '@/components/id/Modal'
+import ContractInteractor from "@/ethereum/ContractInteractor";
+import { ContractContext } from "@/pages/_app";
 
 export const BoxStyle = {
   position: 'absolute',
@@ -34,26 +36,27 @@ const OriginalSetting: NextPage = () => {
   const [royalty, setRoyalty] = useState(0)
   const [isRoyaltyError, setIsRoyaltyError] = useState(false)
 
+  const contract = useContext(ContractContext) as ContractInteractor;
+
   // モーダルウィンドウのopen/close
   const { open, handleOpen, handleClose } = useModal()
   const [loading, setLoading] = useState(false)
   const [register, setComplete] = useState(false)
   const startLoading = () => {
-    handleOpen()
     setLoading(true)
   }
   const completeRegister = () => {
     setLoading(false)
     setComplete(true)
   }
-  const finishRegister = () => {
+  const finishRegister = (contentId: string) => {
     setComplete(false)
     handleClose()
     //TODO 次に作品登録
     const nextPage = 'register'
     router.push({
       pathname: `/${nextPage}`,
-      query: { isOriginal: true},
+      query: { isOriginal: true, contentId: contentId },
     })
   }
 
@@ -68,16 +71,26 @@ const OriginalSetting: NextPage = () => {
     [setRoyalty, setIsRoyaltyError]
   )
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     //TODO バリデーションをここに！
     if (isNaN(royalty)) {
       setIsRoyaltyError(true)
     }
+
+    console.log(`Submit Royalty: ${royalty}`)
     
-    //TODO Submit処理！！
-    console.log(`Sybmit Royalty: ${royalty}`)
-    handleOpen()
+    let _contentId = (await contract.getNextContentId()).toString();
+    
+    try {
+      // ここでメタマスクの確認画面が表示される
+      await contract.registerOriginal(royalty);
+      // 確認（OK）を押したら次の画面へ
+      finishRegister(_contentId);
+    } catch {
+      // 拒否（NG）なら一旦戻す
+      return ;
+    }
   }
 
   return (
