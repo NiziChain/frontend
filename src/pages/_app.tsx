@@ -1,22 +1,26 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { createContext, useEffect, useState } from 'react'
+import { getContractInteractor } from '@/ethereum/ContractUtl'
 
 export const WalletContext = createContext('')
+// @ts-ignore
+export const ContractContext = createContext()
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [address, setAddress] = useState('')
+  const [address, setAddress] = useState('MyAddress')
+  const [contract, setContract] = useState()
 
   useEffect(() => {
-    connectWallet()
-  },[])
-
-  const connectWallet = () => {
+    connect()
     // @ts-ignore
-    (window.ethereum as any)
-      .request({ method: "eth_requestAccounts" })
+    getContractInteractor().then((res) => setContract(res))
+  }, [])
+
+  const connect = () => {
+    ;(window.ethereum as any)
+      .request({ method: 'eth_requestAccounts' })
       .then((x: any) => {
-        console.log(x);
         setAddress(x)
       })
   }
@@ -24,7 +28,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <WalletContext.Provider value={address}>
-        <Component {...pageProps} />
+        <ContractContext.Provider value={contract}>
+          <Component {...pageProps} />
+        </ContractContext.Provider>
       </WalletContext.Provider>
     </>
   )

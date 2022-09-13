@@ -1,10 +1,11 @@
 import { WalletContext } from '@/pages/_app'
 import { AppBar, Box, Container, Toolbar, Typography } from '@mui/material'
 import Link from 'next/link'
+import { useContext } from 'react'
 import CustomHead from './CustomHead'
 
 const Header = () => {
-  // 後でアドレスを追加
+  const address = useContext(WalletContext)[0]
   return (
     <>
       <CustomHead />
@@ -17,11 +18,7 @@ const Header = () => {
             <Link href='/id'>ID発行</Link>
             <Link href='/works'>作品一覧</Link>
             <Link href='/mypage'>マイページ</Link>
-            <WalletContext.Consumer>
-              {(resource) => {
-                return <Box component='span'>{resource}</Box>
-              }}
-            </WalletContext.Consumer>
+            <Box component='span'>{address.slice(0, 5)}...</Box>
           </Container>
         </Toolbar>
       </AppBar>
