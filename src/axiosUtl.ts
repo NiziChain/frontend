@@ -39,10 +39,10 @@ export const getAPIData = async (path: string) => {
   }
 }
 
-export const postAPIData = async (path: string) => {
+export const postAPIData = async (path: string, params: object) => {
     const instance = newAxiosInstance()
     try {
-        const response = await instance.post(path)
+        const response = await instance.post(path, params)
         return response
     } catch(error: any) {
         return error.response
