@@ -7,7 +7,6 @@ import {
   Grid,
   Container,
   Box,
-  Typography,
   Button,
   CircularProgress
 } from '@mui/material'
@@ -100,12 +99,14 @@ const SecondarySetting: NextPage = () => {
               onChange={inputParentTitle}
               helperText={isParentTitleError ? '親作品のタイトルを入力してください。' : ''}
             />
-            <button
+            <Button
               type="submit"
-              className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'
+              variant='contained'
+              size='small'
+              className='font-bold max-h-10 mt-4 bg-slate-500'
             >
               ID発行
-            </button>
+            </Button>
           </Stack>
         </Grid>
       </Container>

@@ -3,6 +3,7 @@ import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import Header from '@/components/base/Header'
 import Footer from '@/components/base/Footer'
+import { Button } from '@mui/material'
 
 
 const IdConfirmationPage: NextPage = () => {
@@ -21,18 +22,22 @@ const IdConfirmationPage: NextPage = () => {
       <div className='min-h-screen'>
         <h1 className='font-bold mt-20 text-center'>IDの発行</h1>
         <div className=' flex justify-center mt-20 text-center align-middle'>
-          <button
+          <Button
+            variant='contained'
+            size='small'
+            className='font-bold py-3 px-5 max-h-10 m-4 bg-slate-500'
             onClick={() => handleClick(true)}
-            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'
           >
-            親作品として登録
-          </button>
-          <button
+            親作品の登録
+          </Button>
+          <Button
+            variant='contained'
+            size='small'
+            className='font-bold py-3 px-5 max-h-10 m-4 bg-slate-500'
             onClick={() => handleClick(false)}
-            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'
           >
-            子作品として登録
-          </button>
+            子作品の登録
+          </Button>
         </div>
       </div>
       <Footer />
