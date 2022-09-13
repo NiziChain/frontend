@@ -1,8 +1,8 @@
 import type { NextPage } from 'next'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
+import Header from '@/components/base/Header'
+import Footer from '@/components/base/Footer'
 import { Container } from '@mui/material'
-import WorksListDisplay, { ContentList } from '@/components/WorksListDisplay'
+import WorksListDisplay, { ContentList } from '@/components/works/WorksListDisplay'
 
 
 const Index: NextPage = () => {
