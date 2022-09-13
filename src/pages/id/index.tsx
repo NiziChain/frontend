@@ -3,15 +3,15 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 //import Modal from "@mui/material/Modal";
-import { CircularProgress, Container, Grid } from '@mui/material'
+import { CircularProgress, Grid } from '@mui/material'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import Modal, { useModal } from '@/components/id/Modal'
 import { useState } from 'react'
+import Modal, { useModal } from '@/components/id/Modal'
 import Header from '@/components/base/Header'
-import Footer from '@/components/base/Footer'
 
-const BoxStyle = {
+export const BoxStyle = {
   position: 'absolute',
   top: '50%',
   left: '50%',
@@ -54,7 +54,7 @@ const IdConfirmationPage: NextPage = () => {
   }
 
   return (
-    <>
+    <div>
       <Header />
       <div className='min-h-screen'>
         <h1 className='font-bold mt-20 text-center'>IDの発行</h1>
