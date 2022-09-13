@@ -36,7 +36,10 @@ const IdConfirmationPage: NextPage = () => {
   const router = useRouter()
   const handleClick: any = (isOriginal: boolean) => {
     const nextPage = isOriginal? 'originalSetting':'secondarySetting'
-    router.push(`/id/${nextPage}`)
+    router.push({
+      pathname: `/id/${nextPage}`,
+      query: {isOriginal: isOriginal},
+    })
   }
 
   const { open, handleOpen, handleClose } = useModal()
