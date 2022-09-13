@@ -33,9 +33,9 @@ const OriginalSetting: NextPage = () => {
     // バリデーションをここに！
     // const isEmptyName = royalty === 0
 
-    // if (isEmptyName) {
-    //   setIsRoyaltyError(true)
-    // }
+    if (isNaN(royalty)) {
+      setIsRoyaltyError(true)
+    }
     
     // Submit処理！！
     console.log(`Sybmit Royalty: ${royalty}`)
@@ -56,7 +56,7 @@ const OriginalSetting: NextPage = () => {
               value={royalty}
               error={isRoyaltyError}
               onChange={inputRoyalty}
-              helperText={isRoyaltyError ? 'ロイヤリティを入力してください。' : ''}
+              helperText={isRoyaltyError ? 'ロイヤリティを数値で入力してください。' : ''}
             />
             <button
               type="submit"
