@@ -1,6 +1,6 @@
 import { NextPage } from 'next'
 import Box from '@mui/material/Box'
-import { BoxStyle } from './idConfirmation'
+import { BoxStyle } from '../id/originalSetting'
 import { Button } from '@mui/material'
 import Header from '@/components/base/Header'
 import Modal, { useModal } from '@/components/id/Modal'
