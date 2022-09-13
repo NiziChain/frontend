@@ -13,10 +13,11 @@ export interface ContentList {
   isOriginal: boolean
   title: string
   description: string
-  created_at: string
+  createdAt: string
+  contentId: string
 }
 
-//
+// 受け取るPropsの型
 interface Props {
   title: string
   array: ContentList[]
@@ -27,9 +28,12 @@ const WorksListDisplay = (props: Props) => {
   const array = props.array
   const router = useRouter()
 
-  const onClickDetail = () => {
-    console.log('詳細クリックされた')
-    router.push(`/`)
+  const onClickDetail = (isOriginal: boolean, contentId: string) => {
+    console.log(`contentId = ${contentId}, isOriginal = ${isOriginal}`)
+    router.push({
+      pathname: `/works/detail`,
+      query: { isOriginal: isOriginal, contentId: contentId },
+    })
   }
 
   return (
@@ -49,7 +53,7 @@ const WorksListDisplay = (props: Props) => {
               return (
                 <Container
                   component='ul'
-                  key={content['created_at']}
+                  key={content['createdAt']}
                   className='flex max-w-md mt-4 mb-4 py-2 border-zinc-300 border rounded-xl'
                 >
                   <Container className='max-w-xs mt-1'>
@@ -60,14 +64,16 @@ const WorksListDisplay = (props: Props) => {
                       情報：{content['description']}
                     </Container>
                     <Container component='li'>
-                      作成日：{content['created_at']}
+                      作成日：{content['createdAt']}
                     </Container>
                   </Container>
                   <Button
                     variant='outlined'
                     size='small'
                     className='max-h-10 mt-4'
-                    onClick={onClickDetail}
+                    onClick={() =>
+                      onClickDetail(content['isOriginal'], content['contentId'])
+                    }
                   >
                     詳細
                   </Button>

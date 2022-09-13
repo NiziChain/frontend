@@ -13,34 +13,42 @@ import { useRouter } from 'next/router'
 
 const MyPage: NextPage = () => {
   // responseを実際に撮ってきたやつに変える
+  // 多分、全部取ってきて、アドレス（秘密鍵）が合うやつを取得する感じ？
+  // できれば、API欲しい
   const response = {
     contents: [
       {
         isOriginal: true,
         title: 'ドラえもん',
         description: '作品ドラえもん',
-        created_at: '2022.09.30',
+        createdAt: '2022.09.30',
+        contentId: '10',
       },
       {
         isOriginal: true,
         title: 'クレヨンしんちゃん',
         description: '作品クレヨンしんちゃん',
-        created_at: '2001.08.30',
+        createdAt: '2001.08.30',
+        contentId: '8',
       },
       {
         isOriginal: false,
         title: 'ドラえもん戦記',
         description: 'ドラえもんを元に作成した2次作品',
-        created_at: '2022.10.30',
+        createdAt: '2022.10.30',
+        contentId: '12',
       },
     ],
   }
 
   const router = useRouter()
 
-  const onClickDetail = () => {
+  const onClickDetail = (isOriginal: boolean, contentId: string) => {
     console.log('詳細クリックされた')
-    router.push(`/`)
+    router.push({
+      pathname: `/works/detail`,
+      query: { isOriginal: isOriginal, contentId: contentId },
+    })
   }
 
   return (
@@ -65,7 +73,7 @@ const MyPage: NextPage = () => {
                 return (
                   <Container
                     component='ul'
-                    key={content['created_at']}
+                    key={content['createdAt']}
                     className='flex max-w-md mt-4 mb-4 py-2 border-zinc-300 border rounded-xl'
                   >
                     <Container className='max-w-xs mt-1'>
@@ -76,14 +84,19 @@ const MyPage: NextPage = () => {
                         情報：{content['description']}
                       </Container>
                       <Container component='li'>
-                        作成日：{content['created_at']}
+                        作成日：{content['createdAt']}
                       </Container>
                     </Container>
                     <Button
                       variant='outlined'
                       size='small'
                       className='max-h-10 mt-4'
-                      onClick={onClickDetail}
+                      onClick={() =>
+                        onClickDetail(
+                          content['isOriginal'],
+                          content['contentId'],
+                        )
+                      }
                     >
                       詳細
                     </Button>
