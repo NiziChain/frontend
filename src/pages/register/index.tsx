@@ -2,6 +2,7 @@ import Header from '@/components/base/Header'
 import Footer from '@/components/base/Footer'
 import { NextPage } from 'next'
 import { useState } from 'react'
+import { Button } from '@mui/material'
 
 import { Controller, useForm } from 'react-hook-form'
 
@@ -34,7 +35,7 @@ const RegisterPage: NextPage = () => {
   return (
     <>
       <Header />
-      <div className=' flex justify-center mt-20 text-center align-middle'>
+      <div className=' flex justify-center mt-20 text-center align-middle min-h-screen'>
         <form
           className='flex flex-col justify-center items-center w-[300px]'
           onSubmit={handleSubmit(onSubmit)}
@@ -93,12 +94,14 @@ const RegisterPage: NextPage = () => {
               className=' border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm sm:text-sm'
             />
           </div>
-          <button
-            type='submit'
-            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'
+          <Button
+            type="submit"
+            variant='contained'
+            size='small'
+            className='font-bold max-h-10 mt-4 bg-slate-500'
           >
             登録
-          </button>
+          </Button>
         </form>
       </div>
       <Footer />
