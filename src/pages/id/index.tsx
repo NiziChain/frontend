@@ -34,14 +34,9 @@ const TypographyStyle = {
 const IdConfirmationPage: NextPage = () => {
 
   const router = useRouter()
-  const handleClick = (isOriginal: boolean) => {
-    if(isOriginal){
-      console.log('親')
-      router.push(`/id/originalSetting`)
-    }else{
-      console.log('子')
-      router.push(`/id/secondarySetting`)
-    }
+  const handleClick: any = (isOriginal: boolean) => {
+    const nextPage = isOriginal? 'originalSetting':'secondarySetting'
+    router.push(`/id/${nextPage}`)
   }
 
   const { open, handleOpen, handleClose } = useModal()
