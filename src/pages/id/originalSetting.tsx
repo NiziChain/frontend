@@ -91,7 +91,7 @@ const OriginalSetting: NextPage = () => {
             <Grid  item className='mt-10 mb-4 text-center font-bold text-lg'>ロイヤリティの設定</Grid >
             <TextField
               type="text"
-              label="ロイヤルティ"
+              label="ロイヤリティ"
               required
               value={royalty}
               error={isRoyaltyError}
