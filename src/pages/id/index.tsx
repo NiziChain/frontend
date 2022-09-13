@@ -17,7 +17,7 @@ const BoxStyle = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: 'silver',
+  bgcolor: 'snow',
   color: 'black',
   border: '2px solid #000',
   boxShadow: 24,
@@ -25,10 +25,7 @@ const BoxStyle = {
 }
 
 const TypographyStyle = {
-  // display:"grid",
-  // bgcolor: "blue",
-  // color:"red",
-  // gap:20,
+  mb: 3,
 }
 
 const IdConfirmationPage: NextPage = () => {
@@ -82,37 +79,45 @@ const IdConfirmationPage: NextPage = () => {
           <div>
             {!loading && !register && (
               <Box sx={BoxStyle}>
-                <Typography
-                  id='modal-modal-title'
-                  variant='h6'
-                  component='h2'
-                  sx={TypographyStyle}
-                >
-                  IDを発行しますか？
-                </Typography>
-                <Button onClick={startLoading}>はい</Button>
-                <Button onClick={handleClose}>いいえ</Button>
+                <Grid container direction="column" alignItems="center">
+                  <Typography
+                    id='modal-modal-title'
+                    variant='h6'
+                    component='h2'
+                    sx={TypographyStyle}
+                  >
+                    IDを発行しますか？
+                  </Typography>
+                  <Grid item>
+                    <Button onClick={startLoading}>はい</Button>
+                    <Button onClick={handleClose}>いいえ</Button>
+                  </Grid>
+                </Grid>
               </Box>
             )}
             {loading && (
               <Box sx={BoxStyle}>
-                <Typography id='a' variant='h6' component='h2'>
-                  IDを発行中です
-                </Typography>
-                <CircularProgress color='secondary' />
-                {/* ↓　ここでローディングの終了をブロックチェーン側から受け取る */}
-                <Button onClick={completeRegister}>ローディング終わり！</Button>
+                <Grid container direction="column" alignItems="center">
+                  <Typography id='a' variant='h6' component='h2'>
+                    IDを発行中です
+                  </Typography>
+                  <CircularProgress color='secondary' sx={{mt: 3, mb: 3}}/>
+                  {/* ↓　ここでローディングの終了をブロックチェーン側から受け取る */}
+                  <Button onClick={completeRegister}>ローディング終わり！</Button>
+                </Grid>  
               </Box>
             )}
             {register && (
               <Box sx={BoxStyle}>
-                <Typography id='modal-modal-title' variant='h6' component='h2'>
-                  IDの発行が完了しました
-                </Typography>
-                <Typography id='modal-modal-description' sx={{ mt: 2 }}>
-                  続けて作品の登録を行います
-                </Typography>
-                <Button onClick={finishRegister}>作品登録に進む</Button>
+                <Grid container direction="column" alignItems="center">
+                  <Typography id='modal-modal-title' variant='h6' component='h2'>
+                    IDの発行が完了しました
+                  </Typography>
+                  <Typography id='modal-modal-description' sx={{ mt: 2, mb: 2 }}>
+                    続けて作品の登録を行います
+                  </Typography>
+                  <Button onClick={finishRegister}>作品登録に進む</Button>
+                </Grid>
               </Box>
             )}
           </div>
