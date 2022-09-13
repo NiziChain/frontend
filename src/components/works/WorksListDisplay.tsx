@@ -29,7 +29,6 @@ const WorksListDisplay = (props: Props) => {
   const router = useRouter()
 
   const onClickDetail = (isOriginal: boolean, contentId: string) => {
-    console.log(`contentId = ${contentId}, isOriginal = ${isOriginal}`)
     router.push({
       pathname: `/works/detail`,
       query: { isOriginal: isOriginal, contentId: contentId },
@@ -53,7 +52,7 @@ const WorksListDisplay = (props: Props) => {
               return (
                 <Container
                   component='ul'
-                  key={content['createdAt']}
+                  key={content['contentId']}
                   className='flex max-w-md mt-4 mb-4 py-2 border-zinc-300 border rounded-xl'
                 >
                   <Container className='max-w-xs mt-1'>

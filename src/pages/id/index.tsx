@@ -3,14 +3,13 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 //import Modal from "@mui/material/Modal";
-import { CircularProgress, Container, Grid } from '@mui/material'
+import { CircularProgress, Grid } from '@mui/material'
 import { NextPage } from 'next'
-import Modal, { useModal } from '@/components/id/Modal'
 import { useState } from 'react'
+import Modal, { useModal } from '@/components/id/Modal'
 import Header from '@/components/base/Header'
-import Footer from '@/components/base/Footer'
 
-const BoxStyle = {
+export const BoxStyle = {
   position: 'absolute',
   top: '50%',
   left: '50%',
@@ -46,52 +45,49 @@ const IdConfirmationPage: NextPage = () => {
   }
 
   return (
-    <>
+    <div>
       <Header />
-      <Container component='div' className=' min-h-screen'>
-        <button onClick={handleOpen}>Open Modal</button>
-        <Modal open={open} className=''>
-          <div>
-            {!loading && !register && (
-              <Box sx={BoxStyle}>
-                <Typography
-                  id='modal-modal-title'
-                  variant='h6'
-                  component='h2'
-                  sx={TypographyStyle}
-                >
-                  IDを発行しますか？
-                </Typography>
-                <Button onClick={startLoading}>はい</Button>
-                <Button onClick={handleClose}>いいえ</Button>
-              </Box>
-            )}
-            {loading && (
-              <Box sx={BoxStyle}>
-                <Typography id='a' variant='h6' component='h2'>
-                  IDを発行中です
-                </Typography>
-                <CircularProgress color='secondary' />
-                {/* ↓　ここでローディングの終了をブロックチェーン側から受け取る */}
-                <Button onClick={completeRegister}>ローディング終わり！</Button>
-              </Box>
-            )}
-            {register && (
-              <Box sx={BoxStyle}>
-                <Typography id='modal-modal-title' variant='h6' component='h2'>
-                  IDの発行が完了しました
-                </Typography>
-                <Typography id='modal-modal-description' sx={{ mt: 2 }}>
-                  続けて作品の登録を行います
-                </Typography>
-                <Button onClick={finishRegister}>作品登録に進む</Button>
-              </Box>
-            )}
-          </div>
-        </Modal>
-      </Container>
-      <Footer />
-    </>
+      <button onClick={handleOpen}>Open Modal</button>
+      <Modal open={open} className=''>
+        <div>
+          {!loading && !register && (
+            <Box sx={BoxStyle}>
+              <Typography
+                id='modal-modal-title'
+                variant='h6'
+                component='h2'
+                sx={TypographyStyle}
+              >
+                IDを発行しますか？
+              </Typography>
+              <Button onClick={startLoading}>はい</Button>
+              <Button onClick={handleClose}>いいえ</Button>
+            </Box>
+          )}
+          {loading && (
+            <Box sx={BoxStyle}>
+              <Typography id='a' variant='h6' component='h2'>
+                IDを発行中です
+              </Typography>
+              <CircularProgress color='secondary' />
+              {/* ↓　ここでローディングの終了をブロックチェーン側から受け取る */}
+              <Button onClick={completeRegister}>ローディング終わり！</Button>
+            </Box>
+          )}
+          {register && (
+            <Box sx={BoxStyle}>
+              <Typography id='modal-modal-title' variant='h6' component='h2'>
+                IDの発行が完了しました
+              </Typography>
+              <Typography id='modal-modal-description' sx={{ mt: 2 }}>
+                続けて作品の登録を行います
+              </Typography>
+              <Button onClick={finishRegister}>作品登録に進む</Button>
+            </Box>
+          )}
+        </div>
+      </Modal>
+    </div>
   )
 }
 
