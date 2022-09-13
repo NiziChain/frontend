@@ -1,9 +1,9 @@
-import Modal, { useModal } from '@/components/Element/Modal'
 import { NextPage } from 'next'
 import Box from '@mui/material/Box'
 import { BoxStyle } from './idConfirmation'
 import { Button } from '@mui/material'
-import Header from '@/components/Header'
+import Header from '@/components/base/Header'
+import Modal, { useModal } from '@/components/id/Modal'
 
 
 const RegisterCompletePage: NextPage = () => {

@@ -5,9 +5,9 @@ import Typography from '@mui/material/Typography'
 //import Modal from "@mui/material/Modal";
 import { CircularProgress, Grid } from '@mui/material'
 import { NextPage } from 'next'
-import Modal, { useModal } from '@/components/Element/Modal'
 import { useState } from 'react'
-import Header from '@/components/Header'
+import Modal, { useModal } from '@/components/id/Modal'
+import Header from '@/components/base/Header'
 
 export const BoxStyle = {
   position: 'absolute',
