@@ -32,11 +32,10 @@ const SecondarySetting: NextPage = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     // バリデーションをここに！
-    // const isEmptyName = ParentTitle === 0
-
-    // if (isEmptyName) {
-    //   setIsParentTitleError(true)
-    // }
+    const isEmptyName = parentTitle === ''
+    if (isEmptyName) {
+      setIsParentTitleError(true)
+    }
     
     // Submit処理！！
     // TODO ここでデータベースでIDの検索をかける
