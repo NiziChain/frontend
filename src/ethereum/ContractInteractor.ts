@@ -1,4 +1,4 @@
-import { ethers, Signer } from "ethers";
+import { BigNumber, ethers, Signer } from "ethers";
 import abi from './abi.json';
 import contractAddress from './contractAddress.json';
 import { Nizi } from "@/ethereum/Nizi";
@@ -12,16 +12,21 @@ class ContractInteractor {
 		this.nizi = new ethers.Contract(contractAddress, abi).connect(this.signer) as Nizi;
 	}
 
-	public async checkRight(childId: number) {
+	public async checkRight(childId: number|string|BigNumber) {
 		return await this.nizi.checkRight(childId);
 	}
 
-	public async getRoyalty(contentId: number) {
+	public async getRoyalty(contentId: number|string|BigNumber) {
 		let royalty = (await this.nizi.functions.getRoyalty(contentId))[0];
 		return royalty;
 	}
 
-	public async getAuthor(contentId: number) {
+	public async getRoyaltyAsString(contentId: number|string|BigNumber) {
+		let royalty = (await this.nizi.functions.getRoyalty(contentId))[0];
+		return royalty.toString();
+	}
+
+	public async getAuthor(contentId: number|string|BigNumber) {
 		return (await this.nizi.getAuthor(1));
 	}
 
@@ -29,22 +34,29 @@ class ContractInteractor {
 		return await this.nizi.getContentsList(address);
 	}
 
-	public async getParent(contentId: number) {
+	// あるauthorの作ったコンテンツのリストを全て返す
+	public async getContentsListAsStrings(address: string) {
+		return (await this.nizi.getContentsList(address)).map((x)=>x.toString());
+	}
+
+	public async getParent(contentId: number|string|BigNumber) {
 		return await this.nizi.getParent(contentId);
 	}
 
-	// 大きな数を入れるとオーバーフローが怖いのでstringにしています。
-	// BigNumberでもOKなのですが、stringの方が扱いやすそう？
-	public async registerOriginal(royalty: string) {
+	public async getParentAsString(contentId: number|string|BigNumber) {
+		return (await this.nizi.getParent(contentId)).toString();
+	}
+
+	public async registerOriginal(royalty: string|number|BigNumber) {
 		return await this.nizi.registerOriginal(royalty);
 	}
 
-	public async registerSecondary(parentId: number) {
+	public async registerSecondary(parentId: string|number|BigNumber) {
 		let royalty = await this.getRoyalty(parentId);
 		return await this.nizi.registerSecondary(parentId, {value: royalty.toString()});
 	}
 
-	public async setRoyalty(contentId: number, royalty: string) {
+	public async setRoyalty(contentId: number|string|BigNumber, royalty: number|string|BigNumber) {
 		return await this.nizi.setRoyalty(contentId, royalty);
 	}
 }
