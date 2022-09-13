@@ -7,8 +7,9 @@ import { CircularProgress, Grid } from '@mui/material'
 import { NextPage } from 'next'
 import Modal, { useModal } from '@/components/Element/Modal'
 import { useState } from 'react'
+import Header from '@/components/Header'
 
-const BoxStyle = {
+export const BoxStyle = {
   position: 'absolute',
   top: '50%',
   left: '50%',
@@ -45,6 +46,7 @@ const IdConfirmationPage: NextPage = () => {
 
   return (
     <div>
+      <Header />
       <button onClick={handleOpen}>Open Modal</button>
       <Modal open={open} className=''>
         <div>
