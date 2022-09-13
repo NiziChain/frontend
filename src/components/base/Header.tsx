@@ -1,11 +1,10 @@
+import { WalletContext } from '@/pages/_app'
 import { AppBar, Box, Container, Toolbar, Typography } from '@mui/material'
 import Link from 'next/link'
 import CustomHead from './CustomHead'
 
-
 const Header = () => {
   // 後でアドレスを追加
-  const address = 'MyAddress'
   return (
     <>
       <CustomHead />
@@ -18,7 +17,11 @@ const Header = () => {
             <Link href='/id'>ID発行</Link>
             <Link href='/works'>作品一覧</Link>
             <Link href='/mypage'>マイページ</Link>
-            <Box component='span'>{address}</Box>
+            <WalletContext.Consumer>
+              {(resource) => {
+                return <Box component='span'>{resource}</Box>
+              }}
+            </WalletContext.Consumer>
           </Container>
         </Toolbar>
       </AppBar>
