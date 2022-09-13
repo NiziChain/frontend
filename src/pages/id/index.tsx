@@ -2,14 +2,13 @@ import * as React from 'react'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
-//import Modal from "@mui/material/Modal";
-import { CircularProgress, Grid } from '@mui/material'
+import { CircularProgress, Container, Grid } from '@mui/material'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import Modal, { useModal } from '@/components/id/Modal'
 import { useState } from 'react'
-import Modal, { useModal } from '@/components/id/Modal'
 import Header from '@/components/base/Header'
+import Footer from '@/components/base/Footer'
 
 export const BoxStyle = {
   position: 'absolute',
@@ -29,13 +28,12 @@ const TypographyStyle = {
 }
 
 const IdConfirmationPage: NextPage = () => {
-
   const router = useRouter()
   const handleClick: any = (isOriginal: boolean) => {
-    const nextPage = isOriginal? 'originalSetting':'secondarySetting'
+    const nextPage = isOriginal ? 'originalSetting' : 'secondarySetting'
     router.push({
       pathname: `/id/${nextPage}`,
-      query: {isOriginal: isOriginal},
+      query: { isOriginal: isOriginal },
     })
   }
 
@@ -54,19 +52,19 @@ const IdConfirmationPage: NextPage = () => {
   }
 
   return (
-    <div>
+    <>
       <Header />
       <div className='min-h-screen'>
         <h1 className='font-bold mt-20 text-center'>IDの発行</h1>
         <div className=' flex justify-center mt-20 text-center align-middle'>
           <button
-            onClick={()=>handleClick(true)}
+            onClick={() => handleClick(true)}
             className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'
           >
             親作品として登録
           </button>
           <button
-            onClick={()=>handleClick(false)}
+            onClick={() => handleClick(false)}
             className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'
           >
             子作品として登録
@@ -79,7 +77,7 @@ const IdConfirmationPage: NextPage = () => {
           <div>
             {!loading && !register && (
               <Box sx={BoxStyle}>
-                <Grid container direction="column" alignItems="center">
+                <Grid container direction='column' alignItems='center'>
                   <Typography
                     id='modal-modal-title'
                     variant='h6'
@@ -97,23 +95,32 @@ const IdConfirmationPage: NextPage = () => {
             )}
             {loading && (
               <Box sx={BoxStyle}>
-                <Grid container direction="column" alignItems="center">
+                <Grid container direction='column' alignItems='center'>
                   <Typography id='a' variant='h6' component='h2'>
                     IDを発行中です
                   </Typography>
-                  <CircularProgress color='secondary' sx={{mt: 3, mb: 3}}/>
+                  <CircularProgress color='secondary' sx={{ mt: 3, mb: 3 }} />
                   {/* ↓　ここでローディングの終了をブロックチェーン側から受け取る */}
-                  <Button onClick={completeRegister}>ローディング終わり！</Button>
-                </Grid>  
+                  <Button onClick={completeRegister}>
+                    ローディング終わり！
+                  </Button>
+                </Grid>
               </Box>
             )}
             {register && (
               <Box sx={BoxStyle}>
-                <Grid container direction="column" alignItems="center">
-                  <Typography id='modal-modal-title' variant='h6' component='h2'>
+                <Grid container direction='column' alignItems='center'>
+                  <Typography
+                    id='modal-modal-title'
+                    variant='h6'
+                    component='h2'
+                  >
                     IDの発行が完了しました
                   </Typography>
-                  <Typography id='modal-modal-description' sx={{ mt: 2, mb: 2 }}>
+                  <Typography
+                    id='modal-modal-description'
+                    sx={{ mt: 2, mb: 2 }}
+                  >
                     続けて作品の登録を行います
                   </Typography>
                   <Button onClick={finishRegister}>作品登録に進む</Button>
