@@ -3,8 +3,9 @@ import Header from '@/components/base/Header'
 import Footer from '@/components/base/Footer'
 import { Container } from '@mui/material'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { getAPIData } from '@/axiosUtl'
+import { ContractContext } from '../_app'
 
 const DetailPage: NextPage = () => {
   const router = useRouter()
@@ -17,6 +18,15 @@ const DetailPage: NextPage = () => {
     createdAt: '',
   }
   const [contentObject, setContentObject] = useState(initialState)
+  const [royalty, setRoyalty] = useState(0)
+  const contract = useContext(ContractContext)
+
+  useEffect(() => {
+    fetchData(contentId).then((res) => {
+      setContentObject(res['data'])
+    })
+    getRoyalty(contentId)
+  }, [])
 
   const fetchData = async (contentId: string) => {
     console.log(isOriginal)
@@ -28,11 +38,11 @@ const DetailPage: NextPage = () => {
     return response
   }
 
-  useEffect(() => {
-    fetchData(contentId).then((res) => {
-      setContentObject(res['data'])
-    })
-  }, [])
+  const getRoyalty = async (contentId: string) => {
+    // @ts-ignore
+    let royaltyTmp = await contract.getRoyaltyAsString(contentId)
+    setRoyalty(royaltyTmp)
+  }
 
   return (
     <>
@@ -45,14 +55,15 @@ const DetailPage: NextPage = () => {
           <Container className='text-xl text-center mb-4'>
             作品詳細 / {isOriginal === 'true' ? '1次作品' : '2次作品'}
           </Container>
-          {Object.keys(contentObject).map((key) => {
+          {Object.keys(contentObject).map((key,index) => {
             return (
-              <Container className='max-w-xs'>
+              <Container className='max-w-xs' key={index}>
                 {/* @ts-ignore */}
                 {key} : {contentObject[key]}
               </Container>
             )
           })}
+          <Container className='max-w-xs'>Royalty : {royalty}</Container>
         </Container>
       </Container>
       <Footer />
