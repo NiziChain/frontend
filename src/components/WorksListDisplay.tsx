@@ -6,7 +6,7 @@ import {
   AccordionDetails,
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-
+import { useRouter } from 'next/router'
 
 // 作品リストの型
 export interface ContentList {
@@ -25,6 +25,13 @@ interface Props {
 const WorksListDisplay = (props: Props) => {
   const title = props.title
   const array = props.array
+  const router = useRouter()
+
+  const onClickDetail = () => {
+    console.log('詳細クリックされた')
+    router.push(`/`)
+  }
+
   return (
     <>
       <Accordion>
@@ -60,7 +67,7 @@ const WorksListDisplay = (props: Props) => {
                     variant='outlined'
                     size='small'
                     className='max-h-10 mt-4'
-                    onClick={() => {}}
+                    onClick={onClickDetail}
                   >
                     詳細
                   </Button>

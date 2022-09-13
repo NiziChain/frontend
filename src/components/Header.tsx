@@ -15,9 +15,9 @@ const Header = () => {
             <Link href='/'>NiziChain</Link>
           </Typography>
           <Container className='text-right space-x-4 mr-2'>
-            <Link href='/'>ID発行</Link>
+            <Link href='/id'>ID発行</Link>
             <Link href='/works'>作品一覧</Link>
-            <Link href='/'>マイページ</Link>
+            <Link href='/mypage'>マイページ</Link>
             <Box component='span'>{address}</Box>
           </Container>
         </Toolbar>
