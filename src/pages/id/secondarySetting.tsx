@@ -10,9 +10,11 @@ import {
   Button,
   CircularProgress
 } from '@mui/material'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Modal, { useModal } from '@/components/id/Modal'
+import { ContractContext } from "@/pages/_app";
+import ContractInteractor from "@/ethereum/ContractInteractor";
 
 export const BoxStyle = {
   position: 'absolute',
@@ -35,6 +37,8 @@ const SecondarySetting: NextPage = () => {
   const [parentId, setParentId] = useState()
   const [isParentTitleError, setIsParentTitleError] = useState(false)
 
+  const contract = useContext(ContractContext) as ContractInteractor;
+
   // モーダルウィンドウのopen/close
   const { open, handleOpen, handleClose } = useModal()
   const [loading, setLoading] = useState(false)
@@ -47,14 +51,14 @@ const SecondarySetting: NextPage = () => {
     setLoading(false)
     setComplete(true)
   }
-  const finishRegister = () => {
+  const finishRegister = (contentId: string) => {
     setComplete(false)
     handleClose()
     //TODO 次に作品登録
     const nextPage = 'register'
     router.push({
       pathname: `/${nextPage}`,
-      query: { isOriginal: false},
+      query: { isOriginal: false, contentId: contentId },
     })
   }
 
@@ -68,7 +72,7 @@ const SecondarySetting: NextPage = () => {
     [setParentTitle, setIsParentTitleError]
   )
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     // バリデーションをここに！
     const isEmptyName = parentTitle === ''
@@ -78,8 +82,21 @@ const SecondarySetting: NextPage = () => {
     
     // Submit処理！！
     // TODO ここでデータベースでIDの検索をかける
+    // とりあえず1にしてます。修正お願いします
+    let parentId = 1;
     console.log(`Sybmit ParentTitle: ${parentTitle}`)
-    handleOpen()
+
+    let _contentId = (await contract.getNextContentId()).toString();
+
+    // ここでメタマスクの確認画面が表示される
+    try {
+      await contract.registerSecondary(parentId);
+      // 確認（OK）を押したら次の画面へ
+      finishRegister(_contentId);
+    } catch {
+      // 拒否（NG）なら一旦戻す
+      return ;
+    }
   }
 
   return (
