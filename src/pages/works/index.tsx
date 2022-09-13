@@ -13,19 +13,22 @@ const Index: NextPage = () => {
         isOriginal: true,
         title: 'ドラえもん',
         description: '作品ドラえもん',
-        created_at: '2022.09.30',
+        createdAt: '2022.09.30',
+        contentId: '10'
       },
       {
         isOriginal: true,
         title: 'クレヨンしんちゃん',
         description: '作品クレヨンしんちゃん',
-        created_at: '2001.08.30',
+        createdAt: '2001.08.30',
+        contentId: '8'
       },
       {
         isOriginal: false,
         title: 'ドラえもん戦記',
         description: 'ドラえもんを元に作成した2次作品',
-        created_at: '2022.10.30',
+        createdAt: '2022.10.30',
+        contentId: '12'
       },
     ],
   }
