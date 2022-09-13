@@ -9,7 +9,7 @@ import Modal, { useModal } from '@/components/id/Modal'
 const RegisterCompletePage: NextPage = () => {
   const { open, handleOpen, handleClose } = useModal()
   return (
-    <div className=' h-screen'>
+    <div className='min-h-screen'>
       <Header />
       <Button onClick={handleOpen}>Show Modal</Button>
       <Modal open={open} className=''>
