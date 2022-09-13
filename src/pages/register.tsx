@@ -1,3 +1,4 @@
+import Header from '@/components/Header'
 import { NextPage } from 'next'
 import { useState } from 'react'
 
@@ -30,6 +31,8 @@ const RegisterPage: NextPage = () => {
   }
 
   return (
+    <>
+    <Header />
     <div className=' flex justify-center mt-20 text-center align-middle'>
       <form
         className='flex flex-col justify-center items-center w-[300px]'
@@ -97,6 +100,8 @@ const RegisterPage: NextPage = () => {
         </button>
       </form>
     </div>
+
+    </>
   )
 }
 export default RegisterPage

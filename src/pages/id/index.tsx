@@ -10,7 +10,7 @@ const CreateIdPage: NextPage = () => {
   }
 
   return (
-    <div>
+    <>
       <Header />
       <div className='min-h-screen'>
           <h1 className='font-bold mt-20 text-center'>IDの発行</h1>
@@ -30,7 +30,7 @@ const CreateIdPage: NextPage = () => {
           </div>
         </div>
       <Footer />
-    </div>
+    </>
   )
 }
 export default CreateIdPage
