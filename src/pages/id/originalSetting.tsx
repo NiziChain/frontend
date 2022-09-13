@@ -13,6 +13,8 @@ import {
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import Modal, { useModal } from '@/components/id/Modal'
+import connectWallet from "@/ethereum/connectWallet";
+import ContractInteractor from "@/ethereum/ContractInteractor";
 
 export const BoxStyle = {
   position: 'absolute',
@@ -68,16 +70,31 @@ const OriginalSetting: NextPage = () => {
     [setRoyalty, setIsRoyaltyError]
   )
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     //TODO バリデーションをここに！
     if (isNaN(royalty)) {
       setIsRoyaltyError(true)
     }
+
+    console.log(`Submit Royalty: ${royalty}`)
+
+    let signer = (await connectWallet())!;
+    if(signer === false) return;
+    if(signer == null) return;
+    let contractInteractor = new ContractInteractor(signer);
+    //  TODO: ここのcontentIdを次の画面に送れる？
+    let _contentId = await contractInteractor.getNextContentId();
     
-    //TODO Submit処理！！
-    console.log(`Sybmit Royalty: ${royalty}`)
-    handleOpen()
+    try {
+      // ここでメタマスクの確認画面が表示される
+      await contractInteractor.registerOriginal(royalty);
+      // 確認（OK）を押したら次の画面へ
+      finishRegister();
+    } catch {
+      // 拒否（NG）なら一旦戻す
+      return ;
+    }
   }
 
   return (
