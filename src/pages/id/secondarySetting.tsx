@@ -8,13 +8,12 @@ import {
   Container,
 } from '@mui/material'
 import { useState, useCallback } from 'react'
-import { Controller, useForm } from 'react-hook-form'
 
 const SecondarySetting: NextPage = () => {
 
   const [parentTitle, setParentTitle] = useState('')
   const [parentId, setParentId] = useState()
-  const [hasParentTitleError, setHasParentTitleError] = useState(false)
+  const [isParentTitleError, setIsParentTitleError] = useState(false)
 
   const onSubmit = () => {
     console.log('発行！')
@@ -25,9 +24,9 @@ const SecondarySetting: NextPage = () => {
       const inputValue = event.target.value
       const isEmpty = inputValue === ''
       setParentTitle(inputValue)
-      setHasParentTitleError(isEmpty)
+      setIsParentTitleError(isEmpty)
     },
-    [setParentTitle, setHasParentTitleError]
+    [setParentTitle, setIsParentTitleError]
   )
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -36,7 +35,7 @@ const SecondarySetting: NextPage = () => {
     // const isEmptyName = ParentTitle === 0
 
     // if (isEmptyName) {
-    //   setHasParentTitleError(true)
+    //   setIsParentTitleError(true)
     // }
     
     // Submit処理！！
@@ -57,9 +56,9 @@ const SecondarySetting: NextPage = () => {
               label="親作品タイトル"
               required
               value={parentTitle}
-              error={hasParentTitleError}
+              error={isParentTitleError}
               onChange={inputParentTitle}
-              helperText={hasParentTitleError ? '親作品のタイトルを入力してください。' : ''}
+              helperText={isParentTitleError ? '親作品のタイトルを入力してください。' : ''}
             />
             <button
               type="submit"

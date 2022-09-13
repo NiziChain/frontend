@@ -8,12 +8,11 @@ import {
   Container,
 } from '@mui/material'
 import { useState, useCallback } from 'react'
-import { Controller, useForm } from 'react-hook-form'
 
 const OriginalSetting: NextPage = () => {
 
   const [royalty, setRoyalty] = useState(0)
-  const [hasRoyaltyError, setHasRoyaltyError] = useState(false)
+  const [isRoyaltyError, setIsRoyaltyError] = useState(false)
 
   const onSubmit = () => {
     console.log('発行！')
@@ -24,9 +23,9 @@ const OriginalSetting: NextPage = () => {
       const inputValue = event.target.value
       const isEmpty = inputValue === ''
       setRoyalty(inputValue)
-      setHasRoyaltyError(isEmpty)
+      setIsRoyaltyError(isEmpty)
     },
-    [setRoyalty, setHasRoyaltyError]
+    [setRoyalty, setIsRoyaltyError]
   )
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -35,7 +34,7 @@ const OriginalSetting: NextPage = () => {
     // const isEmptyName = royalty === 0
 
     // if (isEmptyName) {
-    //   setHasRoyaltyError(true)
+    //   setIsRoyaltyError(true)
     // }
     
     // Submit処理！！
@@ -55,9 +54,9 @@ const OriginalSetting: NextPage = () => {
               label="ロイヤルティ"
               required
               value={royalty}
-              error={hasRoyaltyError}
+              error={isRoyaltyError}
               onChange={inputRoyalty}
-              helperText={hasRoyaltyError ? 'ロイヤリティを入力してください。' : ''}
+              helperText={isRoyaltyError ? 'ロイヤリティを入力してください。' : ''}
             />
             <button
               type="submit"
