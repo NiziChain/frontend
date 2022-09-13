@@ -1,10 +1,8 @@
 import { NextPage } from 'next'
-import { useContext } from 'react'
 import { useRouter } from 'next/router'
 import Header from '@/components/base/Header'
 import Footer from '@/components/base/Footer'
 import { Button } from '@mui/material'
-import { ContractContext } from '../_app'
 
 const IdConfirmationPage: NextPage = () => {
   const router = useRouter()
@@ -15,7 +13,6 @@ const IdConfirmationPage: NextPage = () => {
       query: { isOriginal: isOriginal },
     })
   }
-  const contract = useContext(ContractContext)
 
   return (
     <>
