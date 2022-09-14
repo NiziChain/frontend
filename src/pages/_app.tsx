@@ -12,9 +12,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [contract, setContract] = useState()
 
   useEffect(() => {
-    connect()
-    // @ts-ignore
-    getContractInteractor().then((res) => setContract(res))
+    try {
+      connect()
+      // @ts-ignore
+      getContractInteractor().then((res) => setContract(res))
+    } catch(error) {
+      console.log(error)
+      const url = new URL('https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=ja')
+      alert(`metamaskを以下のURLからインストールしてください\n${url.toString()}`)
+    }
   }, [])
 
   const connect = () => {
