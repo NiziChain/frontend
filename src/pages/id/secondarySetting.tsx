@@ -43,19 +43,58 @@ const SecondarySetting: NextPage = () => {
   const { open, handleOpen, handleClose } = useModal()
   const [loading, setLoading] = useState(false)
   const [register, setComplete] = useState(false)
-  const startLoading = () => {
+
+  const startLoading = async () => {
     handleOpen()
     setLoading(true)
+
+    // Submit処理！！
+    // TODO ここでデータベースでIDの検索をかける
+    // とりあえず1にしてます。修正お願いします
+    let parentId = 1;
+    console.log(`Sybmit ParentTitle: ${parentTitle}`)
+
+    let address = await contract.signer.getAddress()
+    let contentListBefore = (await contract.getContentsListAsStrings(address));
+    console.log("contentListBefore:", contentListBefore);
+
+    let contentId;
+
+    // ここでメタマスクの確認画面が表示される
+    try {
+      await contract.registerSecondary(parentId);
+
+      while(true) {
+        let contentListAfter = (await contract.getContentsListAsStrings(address));
+        console.log("contentListAfter", contentListAfter)
+        if(contentListBefore.length != contentListAfter.length) {
+          contentId = contentListAfter[contentListAfter.length-1];
+          break;
+        } else {
+          await new Promise(resolve => setTimeout(resolve, 3000)) // 3秒待つ
+        }
+      }
+
+      completeRegister();
+      // 確認（OK）を押したら次の画面へ
+      finishRegister(contentId);
+    } catch {
+      setLoading(false);
+      handleClose();
+      return ;
+    }
   }
   const completeRegister = () => {
     setLoading(false)
     setComplete(true)
   }
+
   const finishRegister = (contentId: string) => {
     setComplete(false)
     handleClose()
     //TODO 次に作品登録
     const nextPage = 'register'
+    console.log("確定contentId:", contentId);
     router.push({
       pathname: `/${nextPage}`,
       query: { isOriginal: false, contentId: contentId },
@@ -79,24 +118,8 @@ const SecondarySetting: NextPage = () => {
     if (isEmptyName) {
       setIsParentTitleError(true)
     }
-    
-    // Submit処理！！
-    // TODO ここでデータベースでIDの検索をかける
-    // とりあえず1にしてます。修正お願いします
-    let parentId = 1;
-    console.log(`Sybmit ParentTitle: ${parentTitle}`)
 
-    let _contentId = (await contract.getNextContentId()).toString();
-
-    // ここでメタマスクの確認画面が表示される
-    try {
-      await contract.registerSecondary(parentId);
-      // 確認（OK）を押したら次の画面へ
-      finishRegister(_contentId);
-    } catch {
-      // 拒否（NG）なら一旦戻す
-      return ;
-    }
+    handleOpen()
   }
 
   return (

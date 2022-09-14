@@ -42,8 +42,39 @@ const OriginalSetting: NextPage = () => {
   const { open, handleOpen, handleClose } = useModal()
   const [loading, setLoading] = useState(false)
   const [register, setComplete] = useState(false)
-  const startLoading = () => {
+  const startLoading = async () => {
+    handleOpen();
     setLoading(true)
+
+    let address = await contract.signer.getAddress()
+    let contentListBefore = (await contract.getContentsListAsStrings(address));
+    console.log("contentListBefore:", contentListBefore);
+
+    let contentId;
+
+    // ここでメタマスクの確認画面が表示される
+    try {
+      await contract.registerOriginal(royalty);
+
+      while(true) {
+        let contentListAfter = (await contract.getContentsListAsStrings(address));
+        console.log("contentListAfter", contentListAfter)
+        if(contentListBefore.length != contentListAfter.length) {
+          contentId = contentListAfter[contentListAfter.length-1];
+          break;
+        } else {
+          await new Promise(resolve => setTimeout(resolve, 3000)) // 3秒待つ
+        }
+      }
+
+      completeRegister();
+      // 確認（OK）を押したら次の画面へ
+      finishRegister(contentId);
+    } catch {
+      setLoading(false);
+      handleClose();
+      return ;
+    }
   }
   const completeRegister = () => {
     setLoading(false)
@@ -54,6 +85,7 @@ const OriginalSetting: NextPage = () => {
     handleClose()
     //TODO 次に作品登録
     const nextPage = 'register'
+    console.log("確定したconetntId:", contentId);
     router.push({
       pathname: `/${nextPage}`,
       query: { isOriginal: true, contentId: contentId },
@@ -78,19 +110,7 @@ const OriginalSetting: NextPage = () => {
       setIsRoyaltyError(true)
     }
 
-    console.log(`Submit Royalty: ${royalty}`)
-    
-    let _contentId = (await contract.getNextContentId()).toString();
-    
-    try {
-      // ここでメタマスクの確認画面が表示される
-      await contract.registerOriginal(royalty);
-      // 確認（OK）を押したら次の画面へ
-      finishRegister(_contentId);
-    } catch {
-      // 拒否（NG）なら一旦戻す
-      return ;
-    }
+    handleOpen()
   }
 
   return (
