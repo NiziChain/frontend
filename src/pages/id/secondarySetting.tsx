@@ -1,4 +1,4 @@
-import { NextPage } from 'next'
+import { GetServerSideProps, NextPage } from 'next'
 import Header from '@/components/base/Header'
 import Footer from '@/components/base/Footer'
 import {
@@ -8,13 +8,16 @@ import {
   Container,
   Box,
   Button,
-  CircularProgress
+  CircularProgress,
+  Autocomplete,
 } from '@mui/material'
-import { useState, useCallback, useContext } from 'react'
+import { useState, useCallback, useContext, useRef } from 'react'
 import { useRouter } from 'next/router'
 import Modal, { useModal } from '@/components/id/Modal'
-import { ContractContext } from "@/pages/_app";
-import ContractInteractor from "@/ethereum/ContractInteractor";
+import { ContractContext } from '@/pages/_app'
+import ContractInteractor from '@/ethereum/ContractInteractor'
+import { getAPIData } from '@/axiosUtl'
+import { Controller, useForm } from 'react-hook-form'
 
 export const BoxStyle = {
   position: 'absolute',
@@ -29,15 +32,33 @@ export const BoxStyle = {
   p: 4,
 }
 
-const SecondarySetting: NextPage = () => {
+type contentType = {
+  isOriginal: Boolean
+  contentId: number
+  title: string
+  description: string
+  createdAt: Date
+}
 
+//@ts-ignore
+const SecondarySetting: NextPage = ({ parentList, parentNames }) => {
   const router = useRouter()
 
   const [parentTitle, setParentTitle] = useState('')
-  const [parentId, setParentId] = useState()
+  const [parentId, setParentId] = useState(1)
   const [isParentTitleError, setIsParentTitleError] = useState(false)
 
-  const contract = useContext(ContractContext) as ContractInteractor;
+  const inputRef = useRef(null)
+
+  const contract = useContext(ContractContext) as ContractInteractor
+
+  const { control, handleSubmit, setValue, getValues } = useForm({
+    mode: 'onChange',
+    defaultValues: {
+      single: {},
+      multi: [],
+    },
+  })
 
   // モーダルウィンドウのopen/close
   const { open, handleOpen, handleClose } = useModal()
@@ -50,38 +71,51 @@ const SecondarySetting: NextPage = () => {
 
     // Submit処理！！
     // TODO ここでデータベースでIDの検索をかける
-    // とりあえず1にしてます。修正お願いします
-    let parentId = 1;
-    console.log(`Sybmit ParentTitle: ${parentTitle}`)
+    let contentList: contentType[] = []
+
+    //@ts-igenore
+    parentList.map((content) => {
+      console.log(content)
+      if (content.title == parentTitle) {
+        contentList.push(content)
+      }
+    })
+
+    //parentId = contentList[0].contentId
+
+    //console.log(parentId)
+    console.log('contentList', contentList)
+    setParentId(contentList[0].contentId)
+    console.log(parentId)
 
     let address = await contract.signer.getAddress()
-    let contentListBefore = (await contract.getContentsListAsStrings(address));
-    console.log("contentListBefore:", contentListBefore);
+    let contentListBefore = await contract.getContentsListAsStrings(address)
+    //console.log('contentListBefore:', contentListBefore)
 
-    let contentId;
+    let contentId
 
     // ここでメタマスクの確認画面が表示される
     try {
-      await contract.registerSecondary(parentId);
+      await contract.registerSecondary(parentId)
 
-      while(true) {
-        let contentListAfter = (await contract.getContentsListAsStrings(address));
-        console.log("contentListAfter", contentListAfter)
-        if(contentListBefore.length != contentListAfter.length) {
-          contentId = contentListAfter[contentListAfter.length-1];
-          break;
+      while (true) {
+        let contentListAfter = await contract.getContentsListAsStrings(address)
+        console.log('contentListAfter', contentListAfter)
+        if (contentListBefore.length != contentListAfter.length) {
+          contentId = contentListAfter[contentListAfter.length - 1]
+          break
         } else {
-          await new Promise(resolve => setTimeout(resolve, 3000)) // 3秒待つ
+          await new Promise((resolve) => setTimeout(resolve, 3000)) // 3秒待つ
         }
       }
 
-      completeRegister();
+      completeRegister()
       // 確認（OK）を押したら次の画面へ
-      finishRegister(contentId);
+      finishRegister(contentId)
     } catch {
-      setLoading(false);
-      handleClose();
-      return ;
+      setLoading(false)
+      handleClose()
+      return
     }
   }
   const completeRegister = () => {
@@ -94,7 +128,7 @@ const SecondarySetting: NextPage = () => {
     handleClose()
     //TODO 次に作品登録
     const nextPage = 'register'
-    console.log("確定contentId:", contentId);
+    console.log('確定contentId:', contentId)
     router.push({
       pathname: `/${nextPage}`,
       query: { isOriginal: false, contentId: contentId },
@@ -105,20 +139,31 @@ const SecondarySetting: NextPage = () => {
     (event: { target: { value: any } }) => {
       const inputValue = event.target.value
       const isEmpty = inputValue === ''
-      setParentTitle(inputValue)
       setIsParentTitleError(isEmpty)
+      console.log(inputValue)
     },
-    [setParentTitle, setIsParentTitleError]
+    [setParentTitle, setIsParentTitleError],
   )
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    // バリデーションをここに！
-    const isEmptyName = parentTitle === ''
-    if (isEmptyName) {
-      setIsParentTitleError(true)
+  const handleCheckTitle = () => {
+    if (inputRef.current) {
+      const ref = inputRef.current
+      ref == '' ? setIsParentTitleError(true) : setIsParentTitleError(false)
     }
+    return
+  }
 
+  const handleClickOpen = async () => {
+    // e.preventDefault()
+    // // バリデーションをここに！
+    // const isEmptyName = parentTitle === ''
+    // if (isEmptyName) {
+    //   setIsParentTitleError(true)
+    // }
+
+    let tmptitle: any = getValues().single
+    // console.log("テスト",(getValues().single))
+    setParentTitle(tmptitle)
     handleOpen()
   }
 
@@ -127,20 +172,62 @@ const SecondarySetting: NextPage = () => {
       <Header />
       <Container className='min-h-screen text-center' component='div'>
         <h1 className='mt-10 mb-4 text-center font-bold text-lg'>ID発行</h1>
-        <Grid container direction="column" alignItems="center">
-          <Stack component="form" noValidate onSubmit={handleSubmit} spacing={2} sx={{ m: 2, width: '25ch' }}>
-            <Grid  item className='mt-10 mb-4 text-center font-bold text-lg'>親作品の設定</Grid >
-            <TextField
-              type="text"
-              label="親作品タイトル"
+        <Grid container direction='column' alignItems='center'>
+          <Stack
+            component='form'
+            noValidate
+            onSubmit={handleSubmit(handleClickOpen)}
+            spacing={2}
+            sx={{ m: 2, width: '25ch' }}
+          >
+            <Grid item className='mt-10 mb-4 text-center font-bold text-lg'>
+              親作品の設定
+            </Grid>
+            {/* <TextField
+              type='text'
+              label='親作品タイトル'
               required
               value={parentTitle}
               error={isParentTitleError}
               onChange={inputParentTitle}
-              helperText={isParentTitleError ? '親作品のタイトルを入力してください。' : ''}
+              helperText={
+                isParentTitleError ? '親作品のタイトルを入力してください。' : ''
+              }
+            /> */}
+            <Controller
+              control={control}
+              name='single'
+              render={({ props }) => (
+                <Autocomplete
+                  fullWidth
+                  options={parentNames}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      required
+                      inputRef={inputRef}
+                      onChange={handleCheckTitle}
+                      label='親作品タイトル'
+                      error={isParentTitleError}
+                      helperText={
+                        isParentTitleError
+                          ? '親作品のタイトルを入力してください。'
+                          : ''
+                      }
+                    />
+                  )}
+                  onChange={(event, value) => {
+                    setValue('single', value, {
+                      shouldValidate: true,
+                      shouldDirty: true,
+                      shouldTouch: true,
+                    })
+                  }}
+                />
+              )}
             />
             <Button
-              type="submit"
+              type='submit'
               variant='contained'
               size='small'
               className='font-bold max-h-10 mt-4 bg-slate-500'
@@ -155,8 +242,12 @@ const SecondarySetting: NextPage = () => {
           {!loading && !register && (
             <Box sx={BoxStyle}>
               <Grid container direction='column' alignItems='center'>
-                <Grid item className='mb-5 text-xl'>IDを発行しますか</Grid>
-                <Grid item className='mb-5 text-sm'>「子作品」として登録します</Grid>
+                <Grid item className='mb-5 text-xl'>
+                  IDを発行しますか
+                </Grid>
+                <Grid item className='mb-5 text-sm'>
+                  「子作品」として登録します
+                </Grid>
                 <Grid item>
                   <Button onClick={startLoading}>はい</Button>
                   <Button onClick={handleClose}>いいえ</Button>
@@ -167,7 +258,9 @@ const SecondarySetting: NextPage = () => {
           {loading && (
             <Box sx={BoxStyle}>
               <Grid container direction='column' alignItems='center'>
-                <Grid item className='mb-5 text-xl'>IDを発行中です</Grid>
+                <Grid item className='mb-5 text-xl'>
+                  IDを発行中です
+                </Grid>
                 <CircularProgress color='secondary' sx={{ mt: 3, mb: 3 }} />
               </Grid>
             </Box>
@@ -175,8 +268,12 @@ const SecondarySetting: NextPage = () => {
           {register && (
             <Box sx={BoxStyle}>
               <Grid container direction='column' alignItems='center'>
-                <Grid item className='mb-5 text-xl'>IDの発行が完了しました</Grid>
-                <Grid item className='mb-5 text-sm'>続けて作品の登録を行います</Grid>
+                <Grid item className='mb-5 text-xl'>
+                  IDの発行が完了しました
+                </Grid>
+                <Grid item className='mb-5 text-sm'>
+                  続けて作品の登録を行います
+                </Grid>
                 {/*<Button onClick={finishRegister}>作品登録に進む</Button>*/}
               </Grid>
             </Box>
@@ -189,3 +286,27 @@ const SecondarySetting: NextPage = () => {
 }
 
 export default SecondarySetting
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const res = await getAPIData(`/contents/`)
+  let parentList: any = []
+  let parentNames: any = []
+
+  const contentList = res.data.contents
+
+  if (contentList) {
+    contentList.map((content: contentType) => {
+      if (content.isOriginal) {
+        parentList.push(content)
+        parentNames.push(content.title)
+      }
+    })
+  }
+
+  return {
+    props: {
+      parentList: parentList,
+      parentNames: parentNames,
+    },
+  }
+}
