@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const DEFAULT_API_CONFIG = {
-  baseURL: 'http://0.0.0.0:4000/api/v1',
+  baseURL: `${process.env.NEXT_PUBLIC_BASE_URL}`,
   timeout: 5000,
   mode: 'cors',
   credentials: 'include',
