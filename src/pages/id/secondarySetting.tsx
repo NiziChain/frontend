@@ -69,28 +69,22 @@ const SecondarySetting: NextPage = ({ parentList, parentNames }) => {
     handleOpen()
     setLoading(true)
 
-    // Submit処理！！
-    // TODO ここでデータベースでIDの検索をかける
     let contentList: contentType[] = []
 
-    //@ts-igenore
-    parentList.map((content) => {
+    parentList.map((content: any) => {
       console.log(content)
       if (content.title == parentTitle) {
         contentList.push(content)
       }
     })
 
-    //parentId = contentList[0].contentId
 
     let address = await contract.signer.getAddress()
     let contentListBefore = await contract.getContentsListAsStrings(address)
-    //console.log('contentListBefore:', contentListBefore)
 
     let contentId
     console.log(contentList[0].contentId)
 
-    // ここでメタマスクの確認画面が表示される
     try {
       await contract.registerSecondary(contentList[0].contentId)
 
@@ -106,7 +100,6 @@ const SecondarySetting: NextPage = ({ parentList, parentNames }) => {
       }
 
       completeRegister()
-      // 確認（OK）を押したら次の画面へ
       finishRegister(contentId)
     } catch {
       setLoading(false)
@@ -122,7 +115,6 @@ const SecondarySetting: NextPage = ({ parentList, parentNames }) => {
   const finishRegister = (contentId: string) => {
     setComplete(false)
     handleClose()
-    //TODO 次に作品登録
     const nextPage = 'register'
     console.log('確定contentId:', contentId)
     router.push({
@@ -150,15 +142,7 @@ const SecondarySetting: NextPage = ({ parentList, parentNames }) => {
   }
 
   const handleClickOpen = async () => {
-    // e.preventDefault()
-    // // バリデーションをここに！
-    // const isEmptyName = parentTitle === ''
-    // if (isEmptyName) {
-    //   setIsParentTitleError(true)
-    // }
-
     let tmptitle: any = getValues().single
-    // console.log("テスト",(getValues().single))
     setParentTitle(tmptitle)
     handleOpen()
   }
@@ -193,7 +177,7 @@ const SecondarySetting: NextPage = ({ parentList, parentNames }) => {
             <Controller
               control={control}
               name='single'
-              render={({ props }) => (
+              render={() => (
                 <Autocomplete
                   fullWidth
                   options={parentNames}
@@ -212,7 +196,7 @@ const SecondarySetting: NextPage = ({ parentList, parentNames }) => {
                       }
                     />
                   )}
-                  onChange={(event, value) => {
+                  onChange={(event, value: any) => {
                     setValue('single', value, {
                       shouldValidate: true,
                       shouldDirty: true,
