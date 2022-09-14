@@ -45,7 +45,7 @@ const SecondarySetting: NextPage = ({ parentList, parentNames }) => {
   const router = useRouter()
 
   const [parentTitle, setParentTitle] = useState('')
-  const [parentId, setParentId] = useState(1)
+  const [parentId, setParentId] = useState<number>(1)
   const [isParentTitleError, setIsParentTitleError] = useState(false)
 
   const inputRef = useRef(null)
@@ -83,20 +83,16 @@ const SecondarySetting: NextPage = ({ parentList, parentNames }) => {
 
     //parentId = contentList[0].contentId
 
-    //console.log(parentId)
-    console.log('contentList', contentList)
-    setParentId(contentList[0].contentId)
-    console.log(parentId)
-
     let address = await contract.signer.getAddress()
     let contentListBefore = await contract.getContentsListAsStrings(address)
     //console.log('contentListBefore:', contentListBefore)
 
     let contentId
+    console.log(contentList[0].contentId)
 
     // ここでメタマスクの確認画面が表示される
     try {
-      await contract.registerSecondary(parentId)
+      await contract.registerSecondary(contentList[0].contentId)
 
       while (true) {
         let contentListAfter = await contract.getContentsListAsStrings(address)
