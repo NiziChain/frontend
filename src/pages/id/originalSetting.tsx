@@ -160,8 +160,6 @@ const OriginalSetting: NextPage = () => {
               <Grid container direction='column' alignItems='center'>
                 <Grid item className='mb-5 text-xl'>IDを発行中です</Grid>
                 <CircularProgress color='secondary' sx={{ mt: 3, mb: 3 }} />
-                {/*TODO ↓　ここでローディングの終了をブロックチェーン側から受け取る */}
-                <Button onClick={completeRegister}>ローディング終わり！</Button>
               </Grid>
             </Box>
           )}
