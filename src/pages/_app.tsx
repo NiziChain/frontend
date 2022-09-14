@@ -2,6 +2,7 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { createContext, useEffect, useState } from 'react'
 import { getContractInteractor } from '@/ethereum/ContractUtl'
+import { Alert, Button, Link } from '@mui/material'
 
 export const WalletContext = createContext('')
 // @ts-ignore
@@ -10,16 +11,18 @@ export const ContractContext = createContext()
 function MyApp({ Component, pageProps }: AppProps) {
   const [address, setAddress] = useState('MyAddress')
   const [contract, setContract] = useState()
+  const [isError, setIsError] = useState(false)
+  const warningMessage = `metamaskを次のURLからインストールしてください`
 
   useEffect(() => {
     try {
       connect()
       // @ts-ignore
       getContractInteractor().then((res) => setContract(res))
-    } catch(error) {
+      setIsError(false)
+    } catch (error) {
       console.log(error)
-      const url = new URL('https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=ja')
-      alert(`metamaskを以下のURLからインストールしてください\n${url.toString()}`)
+      setIsError(true)
     }
   }, [])
 
@@ -31,8 +34,31 @@ function MyApp({ Component, pageProps }: AppProps) {
       })
   }
 
+  const onClickWaring = () => {
+    setIsError(false)
+  }
+
   return (
     <>
+      {isError && (
+        <Alert severity='warning'>
+          {warningMessage}:
+          <Link
+            target='_blank'
+            href='https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=ja'
+          >
+            MetaMask
+          </Link>
+          <Button
+            color='inherit'
+            size='small'
+            className='ml-20'
+            onClick={onClickWaring}
+          >
+            閉じる
+          </Button>
+        </Alert>
+      )}
       <WalletContext.Provider value={address}>
         <ContractContext.Provider value={contract}>
           <Component {...pageProps} />
