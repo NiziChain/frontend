@@ -168,7 +168,7 @@ const OriginalSetting: NextPage = () => {
               <Grid container direction='column' alignItems='center'>
                 <Grid item className='mb-5 text-xl'>IDの発行が完了しました</Grid>
                 <Grid item className='mb-5 text-sm'>続けて作品の登録を行います</Grid>
-                <Button onClick={finishRegister}>作品登録に進む</Button>
+                {/*<Button onClick={finishRegister}>作品登録に進む</Button>*/}
               </Grid>
             </Box>
           )}
