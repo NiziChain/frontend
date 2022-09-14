@@ -51,6 +51,7 @@ const DetailPage: NextPage = () => {
             作品詳細 / {isOriginal === 'true' ? '1次作品' : '2次作品'}
           </Container>
           <Container className='max-w-xs'>
+            <Container component='li'>作品ID：{contentObject?.contentId}</Container>
             <Container component='li'>作品名：{contentObject?.title}</Container>
             <Container component='li'>
               情報：{contentObject?.description}
@@ -58,7 +59,7 @@ const DetailPage: NextPage = () => {
             <Container component='li'>
               作成日：{contentObject?.createdAt}
             </Container>
-            <Container className='max-w-xs'>Royalty : {royalty}</Container>
+            <Container className='max-w-xs'>ロイヤリティ : {royalty}</Container>
           </Container>
         </Container>
       </Container>
