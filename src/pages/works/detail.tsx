@@ -6,18 +6,13 @@ import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 import { getAPIData } from '@/axiosUtl'
 import { ContractContext } from '../_app'
+import { ContentList } from '@/components/works/WorksListDisplay'
 
 const DetailPage: NextPage = () => {
   const router = useRouter()
   const isOriginal = router.query['isOriginal']
   const contentId = String(router.query['contentId'])
-  const initialState = {
-    contentId: '',
-    title: '',
-    description: '',
-    createdAt: '',
-  }
-  const [contentObject, setContentObject] = useState(initialState)
+  const [contentObject, setContentObject] = useState<ContentList | null>(null)
   const [royalty, setRoyalty] = useState(0)
   const contract = useContext(ContractContext)
 
@@ -55,15 +50,17 @@ const DetailPage: NextPage = () => {
           <Container className='text-xl text-center mb-4'>
             作品詳細 / {isOriginal === 'true' ? '1次作品' : '2次作品'}
           </Container>
-          {Object.keys(contentObject).map((key,index) => {
-            return (
-              <Container className='max-w-xs' key={index}>
-                {/* @ts-ignore */}
-                {key} : {contentObject[key]}
-              </Container>
-            )
-          })}
-          <Container className='max-w-xs'>Royalty : {royalty}</Container>
+          <Container className='max-w-xs'>
+            <Container component='li'>作品ID：{contentObject?.contentId}</Container>
+            <Container component='li'>作品名：{contentObject?.title}</Container>
+            <Container component='li'>
+              情報：{contentObject?.description}
+            </Container>
+            <Container component='li'>
+              作成日：{contentObject?.createdAt}
+            </Container>
+            <Container className='max-w-xs'>ロイヤリティ : {royalty}</Container>
+          </Container>
         </Container>
       </Container>
       <Footer />
