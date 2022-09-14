@@ -2,7 +2,7 @@ import Header from '@/components/base/Header'
 import Footer from '@/components/base/Footer'
 import { NextPage } from 'next'
 import { useState } from 'react'
-import { Button } from '@mui/material'
+import { Button, Alert } from '@mui/material'
 import { postAPIData } from '@/axiosUtl'
 
 import { Controller, useForm } from 'react-hook-form'
@@ -16,12 +16,7 @@ const RegisterPage: NextPage = () => {
   const contentId = router.query['contentId']
   const userAddress = useContext(WalletContext)[0]
 
-  type formInfo = {
-    itemId: number
-    title: string
-    description: string
-    parentTitle?: string
-  }
+  const [errorMessages, setErrorMessages] = useState<string[]>([])
 
   const { register, handleSubmit, control } = useForm({
     //defaultValues: { itemId: 0, title: '', description: '', parentTitle: '' },
@@ -49,17 +44,27 @@ const RegisterPage: NextPage = () => {
     console.log(params)
     console.log(path)
     postAPIData(path, params)
-    router.push('/works')
+      .then(() => {
+        router.push('/works')
+      })
+      .catch((error) => {
+        setErrorMessages(error.response.data.detailMessage)
+      })
   }
 
   return (
     <>
       <Header />
-      <div className=' flex justify-center text-center min-h-screen'>
-        <form
-          className='flex flex-col justify-center items-center w-[300px]'
-          onSubmit={handleSubmit(onSubmit)}
-        >
+          <div className=' flex justify-center text-center min-h-screen'>
+            <form
+              className='flex flex-col justify-center items-center w-[300px]'
+              onSubmit={handleSubmit(onSubmit)}
+            >
+          {errorMessages.length > 0 && (
+            errorMessages.map((errorMessage: string) => {
+              return <Alert className='mb-2' severity='error'>{errorMessage}</Alert>
+            })
+          )}
           <h1 className='font-bold'>作品登録</h1>
           <div className=''>
           </div>
